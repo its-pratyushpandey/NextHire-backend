@@ -91,6 +91,24 @@ app.use("/api/v1", uploadRoute);
 app.use("/api/v1/recruiter", recruiterRoute);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/chat', chatRoutes);
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to NextHire Backend API',
+    success: true,
+    availableRoutes: [
+      '/api/v1/user',
+      '/api/v1/company',
+      '/api/v1/job',
+      '/api/v1/application',
+      '/api/v1/recruiter',
+      '/api/v1/test/protected',
+      '/api/v1/upload',
+      '/api/chat',
+      '/api/resume',
+      '/api/ai'
+    ]
+  });
+});
 app.use("/api/resume", resumeParserRoutes);
 app.use("/api/ai", aiJobMatchingRoutes);
 app.use("/api/ai", aiCoverLetterRoutes);
