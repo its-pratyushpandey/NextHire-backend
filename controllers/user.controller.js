@@ -8,37 +8,39 @@ import cloudinary from "../utils/cloudinary.js";
 // Register user
 export const register = async (req, res) => {
     try {
+        // Log request body for debugging
+        console.log('Register request body:', req.body);
         // Get fields
         const { fullname, email, phoneNumber, password, role } = req.body;
         // Validate fields
-        if (!fullname || !email || !phoneNumber || !password || !role) {
-            return res.status(400).json({
-                message: "Something is missing",
-                success: false
-            });
+        if (!fullname) {
+            return res.status(400).json({ message: "Missing fullname", success: false });
+        }
+        if (!email) {
+            return res.status(400).json({ message: "Missing email", success: false });
+        }
+        if (!phoneNumber) {
+            return res.status(400).json({ message: "Missing phoneNumber", success: false });
+        }
+        if (!password) {
+            return res.status(400).json({ message: "Missing password", success: false });
+        }
+        if (!role) {
+            return res.status(400).json({ message: "Missing role", success: false });
         }
         // Email regex
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({
-                message: "Invalid email format",
-                success: false
-            });
+            return res.status(400).json({ message: "Invalid email format", success: false });
         }
         // Password length
         if (password.length < 6) {
-            return res.status(400).json({
-                message: "Password must be at least 6 characters",
-                success: false
-            });
+            return res.status(400).json({ message: "Password must be at least 6 characters", success: false });
         }
         // Check user exists
         const user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({
-                message: 'User already exists with this email.',
-                success: false,
-            });
+            return res.status(400).json({ message: 'User already exists with this email.', success: false });
         }
         // Default avatar
         let profilePhotoUrl = '/default-avatar.png';
@@ -51,10 +53,7 @@ export const register = async (req, res) => {
                     profilePhotoUrl = cloudResponse.secure_url;
                 } catch (cloudinaryError) {
                     console.error('Cloudinary upload failed:', cloudinaryError);
-                    return res.status(500).json({
-                        message: "Failed to upload profile photo",
-                        success: false
-                    });
+                    return res.status(500).json({ message: "Failed to upload profile photo", success: false });
                 }
             }
         }
