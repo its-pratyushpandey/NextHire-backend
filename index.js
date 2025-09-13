@@ -61,7 +61,11 @@ app.use(helmet.xssFilter());
 app.use(helmet.hidePoweredBy());
 
 // CORS configuration
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://nexthireap.netlify.app',
+];
 const corsOptions = {
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps, curl, etc.)
@@ -69,6 +73,7 @@ const corsOptions = {
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
+      console.error('Blocked by CORS:', origin);
       return callback(new Error('Not allowed by CORS'));
     }
   },
